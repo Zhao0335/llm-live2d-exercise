@@ -1,0 +1,9 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+httpx>=0.26
+
+[all]
+edge-tts>=6.1
+
+[edge-tts]
+edge-tts>=6.1

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-live2d"
+version = "0.1.0"
+description = "A minimal, composable framework for driving Live2D models with LLMs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "httpx>=0.26",
+]
+
+[project.optional-dependencies]
+edge-tts = ["edge-tts>=6.1"]
+all = ["edge-tts>=6.1"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["llm_live2d*"]

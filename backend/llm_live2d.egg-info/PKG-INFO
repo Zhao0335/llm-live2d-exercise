@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: llm-live2d
+Version: 0.1.0
+Summary: A minimal, composable framework for driving Live2D models with LLMs.
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi>=0.110
+Requires-Dist: uvicorn[standard]>=0.27
+Requires-Dist: httpx>=0.26
+Provides-Extra: edge-tts
+Requires-Dist: edge-tts>=6.1; extra == "edge-tts"
+Provides-Extra: all
+Requires-Dist: edge-tts>=6.1; extra == "all"

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; }
+  html, body {
+    width: 300px;
+    height: 400px;
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+  }
+  #stage {
+    display: block;
+    width: 300px;
+    height: 400px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<!-- Live2D 库（路径相对于 desktop/，引用 frontend 目录里的本地文件） -->
+<script src="../frontend/public/libs/live2dcubismcore.min.js"></script>
+<script src="../frontend/public/libs/live2d.min.js"></script>
+<script src="../frontend/public/libs/pixi.min.js"></script>
+<script src="../frontend/public/libs/pixi-live2d-display.min.js"></script>
+
+<script>
+// 模型地址：可以改成本地路径或你自己的模型 URL
+const MODEL_URL =
+  'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json';
+
+const W = 300, H = 400;
+const canvas = document.getElementById('stage');
+
+const app = new PIXI.Application({
+  view: canvas,
+  width: W,
+  height: H,
+  backgroundAlpha: 0,
+  antialias: true,
+  autoStart: true,
+});
+
+let model = null;
+
+PIXI.live2d.Live2DModel.from(MODEL_URL, { autoInteract: false })
+  .then((m) => {
+    model = m;
+    app.stage.addChild(m);
+
+    // 锚点在底部中心，贴着窗口底边
+    m.anchor.set(0.5, 1.0);
+    const scale = Math.min(W / m.internalModel.width, H / m.internalModel.height) * 0.95;
+    m.scale.set(scale);
+    m.x = W / 2;
+    m.y = H;
+  })
+  .catch((e) => console.error('[pet] 模型加载失败:', e));
+
+// ─── 点击穿透检测 ─────────────────────────────────────────────────────────────
+// 每次 mousemove 都判断：鼠标是否落在模型的包围盒内。
+// 在包围盒内 → 关闭穿透（角色响应点击）；在外面 → 开启穿透（穿透到下层窗口）。
+document.addEventListener('mousemove', (e) => {
+  const onModel = isOverModel(e.clientX, e.clientY);
+  window.electronAPI.setIgnoreMouse(!onModel);
+  document.body.style.cursor = onModel ? 'pointer' : 'default';
+});
+
+function isOverModel(x, y) {
+  if (!model) return false;
+  try {
+    const b = model.getBounds();
+    return x >= b.x && x <= b.x + b.width && y >= b.y && y <= b.y + b.height;
+  } catch (_) {
+    return false;
+  }
+}
+
+// 点击角色 → 打开聊天窗口
+document.addEventListener('click', () => {
+  window.electronAPI.openChat();
+});
+</script>
+</body>
+</html>

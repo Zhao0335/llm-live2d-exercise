@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>llm-live2d</title>
+
+  <!-- Cubism 4 / 5 core. 这一份必须先于 pixi-live2d-display 加载 -->
+  <script src="./libs/live2dcubismcore.min.js"></script>
+  <!-- Cubism 2.1 老 runtime（如果你的模型是 .moc 而不是 .moc3） -->
+  <script src="./libs/live2d.min.js"></script>
+  <!-- PixiJS v7（注意：v8 渲染管线变了，pixi-live2d-display 还没适配） -->
+  <script src="./libs/pixi.min.js"></script>
+  <!-- pixi-live2d-display 的 lipsyncpatch fork（提供 model.speak()） -->
+  <script src="./libs/pixi-live2d-display.min.js"></script>
+
+  <!-- MediaPipe FaceMesh + Camera（虹膜追踪；加载失败时 FaceTracker 自动回退到鼠标模式） -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>llm-live2d</span>
+      </div>
+      <div class="status" id="status">连接中…</div>
+    </header>
+
+    <main class="stage-wrap">
+      <canvas id="stage"></canvas>
+      <div class="thinking" id="thinking" hidden></div>
+      <div class="subtitle" id="subtitle"></div>
+    </main>
+
+    <div class="debug-panel">
+      <div class="debug-header" id="debugToggle">
+        <span>📋 原始返回</span>
+        <span class="debug-arrow">▼</span>
+      </div>
+      <div class="debug-content" id="debugContent" hidden>
+        <div class="debug-text" id="debugText"></div>
+      </div>
+    </div>
+
+    <footer class="composer">
+      <textarea id="input" rows="1" placeholder="说点什么…（Enter 发送，Shift+Enter 换行）"></textarea>
+      <button id="send" class="btn-primary">发送</button>
+      <button id="interrupt" class="btn-ghost" title="打断 AI 当前发言">⏹</button>
+      <button id="eyeTracking" class="btn-ghost" title="启动眼球跟踪（跟随鼠标）">👁️ 眼球跟踪</button>
+    </footer>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

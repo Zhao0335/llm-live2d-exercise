@@ -1,0 +1,34 @@
+# 示例配置（YAML 形式）。
+# 当前 v0.1 用环境变量驱动 examples/run_server.py，
+# 这份文件是 v0.2 配置即代码的预演 —— 提交给后续做 ConfigLoader 时参考。
+
+llm:
+  provider: openai-compat
+  model: gpt-4o-mini
+  base_url: https://api.openai.com/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.7
+
+tts:
+  provider: edge-tts
+  voice: zh-CN-XiaoxiaoNeural
+  rate: "+0%"
+
+audio_sink:
+  provider: in-memory
+  url_prefix: /audio
+
+pipeline:
+  history_max_turns: 20
+  tts_concurrency: 2
+  system_prompt: |
+    你是一个友好的虚拟形象，名字叫小语。回复时可以用以下控制标签：
+    [emotion:happy] / [emotion:sad] / [emotion:surprised] 切换表情
+    [motion:Idle] / [motion:TapBody] 触发动作
+    保持轻松自然，不要刻意大量加标签，每句话不要太长。
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  cors_origins:
+    - "*"

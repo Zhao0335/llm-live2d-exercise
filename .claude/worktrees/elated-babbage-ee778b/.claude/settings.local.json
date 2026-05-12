@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find \"D:\\\\llm-live2d\\\\llm-live2d\" -type d | grep -v \".git\\\\|__pycache__\\\\|.egg-info\" | sort)"
-    ]
-  }
-}
